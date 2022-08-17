@@ -1,0 +1,38 @@
+[
+	{
+		"id": "378a2c31-73db-4983-b05b-fae655855555",
+		"currency": "1INCH",
+		"balance": "0.0000000000000000",
+		"hold": "0.0000000000000000",
+		"available": "0",
+		"profile_id": "c55a12e0-9869-48a6-98d3-17adfa455555",
+		"trading_enabled": true
+	},
+	{
+		"id": "d3acd60e-558c-4ec9-9bbe-227221a55555",
+		"currency": "AAVE",
+		"balance": "0.0000000000000000",
+		"hold": "0.0000000000000000",
+		"available": "0",
+		"profile_id": "c28a12e0-9559-48a6-98d3-17adfa455555",
+		"trading_enabled": true
+	},
+	{
+		"id": "c4e32cba-5554-4e4d-9492-82a930f55555",
+		"currency": "ABT",
+		"balance": "0.0000000000000000",
+		"hold": "0.0000000000000000",
+		"available": "0",
+		"profile_id": "c28a12e0-9559-48a6-98d3-17adfa455555",
+		"trading_enabled": true
+	},
+	{
+		"id": "9c1e5e69-a550-460f-9fc6-d0bf2b855555",
+		"currency": "ACH",
+		"balance": "0.0000000000000000",
+		"hold": "0.0000000000000000",
+		"available": "0",
+		"profile_id": "c28a12e0-9559-48a6-98d3-17adfa455555",
+		"trading_enabled": true
+	}
+]
