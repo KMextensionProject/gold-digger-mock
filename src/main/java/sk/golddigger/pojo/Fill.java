@@ -2,6 +2,8 @@ package sk.golddigger.pojo;
 
 public class Fill {
 
+	// ziskat cez golddigger nejaku historicku transakciu a ak sa vrati to co ma v sebe fill, tak vratim fill z kontrolera aj tam
+	
 //	{
 //		"created_at": "2022-08-16T09:27:23.888354Z",
 //		"trade_id": 67282731,

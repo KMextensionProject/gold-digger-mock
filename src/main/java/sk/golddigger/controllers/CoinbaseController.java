@@ -1,6 +1,7 @@
 package sk.golddigger.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import sk.golddigger.pojo.Account;
 import sk.golddigger.pojo.Fill;
+import sk.golddigger.pojo.Order;
 import sk.golddigger.pojo.Transaction;
 import sk.golddigger.services.CoinbaseService;
 
@@ -49,6 +51,7 @@ public class CoinbaseController {
 	}
 
 	@RequestMapping(path = "/withdraw", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	public void withdraw(@RequestBody Transaction withdrawalTransaction) {
 		coinbaseService.makeWithdrawal(withdrawalTransaction);
 	}
@@ -61,6 +64,20 @@ public class CoinbaseController {
 			@RequestParam Integer limit) {
 
 		return coinbaseService.getOrderFills(productId, profileId, limit);
+	}
+
+	@RequestMapping(path = "/orders", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> placeBuyOrder(Order order) {
+		return coinbaseService.placeBuyOrder(order);
+	}
+
+	// TENTO ENDPOINT SA ANI NEPOUZIVA:
+	// Order tym padom by mal jebat na tie ktore su null
+	@RequestMapping(path = "/orders/{id}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public Order getOrder(@PathVariable String id) {
+		return coinbaseService.getOrder(id);
 	}
 
 }
