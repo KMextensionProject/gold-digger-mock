@@ -2,6 +2,8 @@ package sk.golddigger.pojo;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public final class Account {
 
 	private static final String profileId = UUID.randomUUID().toString();
@@ -11,6 +13,8 @@ public final class Account {
 	private String balance;
 	private String hold;
 	private String available;
+
+	@JsonProperty("trading_enabled")
 	private Boolean tradingEnabled;
 
 	public Account() {

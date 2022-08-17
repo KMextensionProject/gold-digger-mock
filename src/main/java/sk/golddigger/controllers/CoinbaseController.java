@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import sk.golddigger.pojo.Account;
+import sk.golddigger.pojo.Fill;
+import sk.golddigger.pojo.Transaction;
 import sk.golddigger.services.CoinbaseService;
 
 @Controller
@@ -35,8 +39,28 @@ public class CoinbaseController {
 	@RequestMapping(path = "/accounts/{id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public Account getAccount(@PathVariable String id) {
-		// TODO: should return 404 ?
 		return coinbaseService.getAccount(id);
+	}
+
+	@RequestMapping(path = "/deposit", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseStatus(code = HttpStatus.ACCEPTED)
+	public void deposit(@RequestBody Transaction depositTransaction) {
+		coinbaseService.addDeposit(depositTransaction);
+	}
+
+	@RequestMapping(path = "/withdraw", method = RequestMethod.POST, consumes = "application/json")
+	public void withdraw(@RequestBody Transaction withdrawalTransaction) {
+		coinbaseService.makeWithdrawal(withdrawalTransaction);
+	}
+
+	@RequestMapping(path = "/fills", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public List<Fill> getOrderFills(
+			@RequestParam(name = "product_id") String productId,
+			@RequestParam(name = "profile_id") String profileId,
+			@RequestParam Integer limit) {
+
+		return coinbaseService.getOrderFills(productId, profileId, limit);
 	}
 
 }
