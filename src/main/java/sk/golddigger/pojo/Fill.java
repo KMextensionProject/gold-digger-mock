@@ -1,6 +1,6 @@
 package sk.golddigger.pojo;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -53,7 +53,7 @@ public class Fill {
 	private Boolean settled;
 
 	public Fill() {
-		this.createdAt = LocalDateTime.now().toString();
+		this.createdAt = Instant.now().toString();
 	}
 
 	public String getCreatedAt() {
