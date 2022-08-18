@@ -51,7 +51,7 @@ public class CoinbaseController {
 	}
 
 	@RequestMapping(path = "/withdraw", method = RequestMethod.POST, consumes = "application/json")
-	@ResponseStatus(code = HttpStatus.ACCEPTED)
+	@ResponseStatus(code = HttpStatus.ACCEPTED) // toto by malo vratit nie void ale response entity
 	public void withdraw(@RequestBody Transaction withdrawalTransaction) {
 		coinbaseService.makeWithdrawal(withdrawalTransaction);
 	}

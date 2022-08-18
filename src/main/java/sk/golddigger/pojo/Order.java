@@ -1,21 +1,33 @@
 package sk.golddigger.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Order {
 
+	@JsonProperty("profile_id")
 	private String profileId;
+
+	@JsonProperty("product_id")
 	private String productId;
+
+	@JsonProperty("time_in_force")
+	private String timeInForce;
+
+	@JsonProperty("post_only")
+	private Boolean postOnly;
+
+	@JsonProperty("cancel_after")
+	private String cancelAfter;
+
 	private String type;
 	private String side;
 	private Double price;
 	private Double size;
-	private String timeInForce;
-	private Boolean postOnly;
-	private String cancelAfter;
 	private Double funds;
 	private String stp;
 
 	public Order() {
-		
+
 	}
 
 	public String getStp() {

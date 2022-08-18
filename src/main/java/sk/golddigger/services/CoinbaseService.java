@@ -1,7 +1,6 @@
 package sk.golddigger.services;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,30 +21,83 @@ public class CoinbaseService {
 	private static final Logger logger = Logger.getAnonymousLogger();
 
 	private static List<Account> accounts;
+	private static List<Fill> fills;
+
 	static {
 		initAccounts();
+		initFills();
 	}
 
 	private static void initAccounts() {
 		accounts = new ArrayList<>();
 
 		Account account = new Account();
-		account.setBalance("200.00");
 		account.setCurrency("EUR");
+		account.setBalance("200.00");
+		account.setAvailable(account.getBalance());
+		account.setHold("0.0000");
 		accounts.add(account);
 
 		account = new Account();
-		account.setBalance("251.17");
 		account.setCurrency("DOT");
+		account.setBalance("251.17");
+		account.setAvailable(account.getBalance());
+		account.setHold("0.0000");
 		accounts.add(account);
 
 		account = new Account();
-		account.setBalance("0.2164890");
 		account.setCurrency("BTC");
+		account.setBalance("0.2164890");
+		account.setAvailable(account.getBalance());
+		account.setHold("0.0000");
+		accounts.add(account);
+
+		account = new Account();
+		account.setCurrency("ETH");
+		account.setBalance("0.00");
+		account.setAvailable(account.getBalance());
+		account.setHold("0.0000");
+		accounts.add(account);
+
+		account = new Account();
+		account.setCurrency("XRP");
+		account.setBalance("0.00");
+		account.setAvailable(account.getAvailable());
+		account.setHold("0.0000");
+		accounts.add(account);
+
+		account = new Account();
+		account.setCurrency("LTC");
+		account.setBalance("0.00");
+		account.setAvailable(account.getAvailable());
+		account.setHold("0.0000");
 		accounts.add(account);
 	}
 
-	// init fill list -> could be a limited stack that empties itself
+	private static void initFills() {
+		Fill fill = createBaseFill();
+		fill.setOrderId(UUID.randomUUID().toString());
+		fill.setProductId("BTC-EUR");
+		fill.setPrice("56000");
+		fill.setSize("1000");
+		fill.setSide("buy");
+
+		fills = new ArrayList<>(50);
+		fills.add(fill);
+	}
+
+	private static Fill createBaseFill() {
+		Fill fill = new Fill();
+		fill.setProfileId(UUID.randomUUID().toString());
+		fill.setUserId(UUID.randomUUID().toString());
+		fill.setTradeId(15648929); // generate random
+		fill.setLiquidity("T");
+		fill.setUsdVolume("0.00");
+		fill.setFee("1.50");
+		fill.setSettled(true);
+
+		return fill;
+	}
 
 	public void ping() {
 		logger.info(() -> "ping() [mock status: OK]");
@@ -71,44 +123,43 @@ public class CoinbaseService {
 		return account.get();
 	}
 
-	// TODO: clean this shit up
 	public void addDeposit(Transaction depositTransaction) {
-		Optional<Account> oAccount = accounts.stream()
-			.filter(a -> a.getId().equals(depositTransaction.getAccountId()))
-			.findFirst();
-
-		// TODO: add to Fills list
-
-		if (oAccount.isPresent()) {
-			Account account = oAccount.get();
-			double currentBalance = Double.parseDouble(account.getBalance());
-			account.setBalance(String.valueOf(currentBalance + depositTransaction.getAmount()));
-		}
+		depositTransaction.setDirection("IN");
+		processTransaction(depositTransaction);
 	}
 
+	// TODO: fuck that up when there is no sufficient amount of money to withdraw
 	public void makeWithdrawal(Transaction withdrawalTransaction) {
+		withdrawalTransaction.setDirection("OUT");
+		processTransaction(withdrawalTransaction);
+	}
+	
+	private void processTransaction (Transaction tx) {
 		Optional<Account> oAccount = accounts.stream()
-				.filter(a -> a.getId().equals(withdrawalTransaction.getAccountId()))
+				.filter(a -> a.getId().equals(tx.getAccountId()))
 				.findFirst();
-
-		// TODO: add to Fills list
 
 		if (oAccount.isPresent()) {
 			Account account = oAccount.get();
 			double currentBalance = Double.parseDouble(account.getBalance());
-			account.setBalance(String.valueOf(currentBalance - withdrawalTransaction.getAmount()));
+
+			if ("IN".equals(tx.getDirection())) {
+				account.setBalance(String.valueOf(currentBalance + tx.getAmount()));
+			} else {
+				account.setBalance(String.valueOf(currentBalance - tx.getAmount()));
+			}
+			account.setAvailable(account.getBalance());
 		}
 	}
 
 	public List<Fill> getOrderFills(String productId, String profileId, Integer limit) {
-		// could even return emptyList()
-		return Collections.emptyList();
+		return new ArrayList<>(fills);
 	}
 
 	public Map<String, Object> placeBuyOrder(Order order) {
 		Map<String, Object> result = new HashMap<>();
 		result.put("id", UUID.randomUUID().toString());
-
+		// TODO: add to fills
 		return result;
 	}
 
