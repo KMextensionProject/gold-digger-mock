@@ -68,11 +68,10 @@ public class CoinbaseController {
 
 	@RequestMapping(path = "/orders", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	public Map<String, Object> placeBuyOrder(Order order) {
-		return coinbaseService.placeBuyOrder(order);
+	public Map<String, Object> placeOrder(Order order) {
+		return coinbaseService.placeOrder(order);
 	}
 
-	// TENTO ENDPOINT SA ANI NEPOUZIVA:
 	// Order tym padom by mal jebat na tie ktore su null
 	@RequestMapping(path = "/orders/{id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody

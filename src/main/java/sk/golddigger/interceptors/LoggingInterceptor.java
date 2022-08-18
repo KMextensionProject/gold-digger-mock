@@ -23,6 +23,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 		String url = request.getRequestURI().toString();
+		String method = request.getMethod();
 		long time = System.currentTimeMillis() - requestStartTime;
 		int code = response.getStatus();
 		String status = "OK";
@@ -47,7 +48,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
 			status = "SERVER_ERROR";
 			break;
 		}
-		logger.info(url + " " + code + "-" + status + " (" + time + "ms)");
+		logger.info(method + ": " + url + "  " + code + " " + status + "  (" + time + "ms)");
 	}
 
 }

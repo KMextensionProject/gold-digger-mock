@@ -1,6 +1,7 @@
 package sk.golddigger.pojo;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,6 +24,8 @@ public class Fill {
 //		"settled": true,
 //		"usd_volume": "201.4679725632000000"
 //	}
+
+	private static String staticUser = UUID.randomUUID().toString();
 
 	@JsonProperty("created_at")
 	private String createdAt;
@@ -54,6 +57,7 @@ public class Fill {
 
 	public Fill() {
 		this.createdAt = Instant.now().toString();
+		this.userId = staticUser;
 	}
 
 	public String getCreatedAt() {
