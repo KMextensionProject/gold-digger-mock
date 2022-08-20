@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.*;
 
 import org.springframework.stereotype.Service;
 
@@ -84,7 +84,7 @@ public class CoinbaseService {
 
 		Fill dotFill = createBaseFill();
 		dotFill.setProductId("DOT-EUR");
-		dotFill.setPrice("4700");
+		dotFill.setPrice("34700");
 		dotFill.setSize("2500");
 		dotFill.setSide("buy");
 
@@ -163,7 +163,9 @@ public class CoinbaseService {
 	}
 
 	public List<Fill> getOrderFills(String productId, String profileId, Integer limit) {
-		return new ArrayList<>(fills);
+		return fills.stream()
+			.filter(f -> f.getProductId().equals(productId))
+			.collect(toList());
 	}
 
 	public Map<String, Object> placeOrder(Order order) {
@@ -176,13 +178,21 @@ public class CoinbaseService {
 			return null;
 		}
 
+		String orderSide = order.getSide();
+		if (orderSide == null) {
+			return null;
+		}
+
 		Double size = order.getSize();
 		if (size == null) {
 			size = order.getFunds();
 		}
 
-		String accountCurrency = productId.substring(productId.indexOf('-') + 1);
-		String tradingCurrency = productId.substring(0, productId.indexOf('-'));
+		// BTC-EUR
+		// EUR
+		// BTC
+		String accountCurrency = productId.substring(productId.indexOf('-') + 1); // EUR
+		String tradingCurrency = productId.substring(0, productId.indexOf('-')); // BTC
 
 //		Optional<Account> baseAccount = accounts.stream()
 //			.filter(a -> a.getCurrency().equals(accountCurrency))
@@ -194,7 +204,7 @@ public class CoinbaseService {
 
 		Map<String, Account> counterAccounts = accounts.stream()
 			.filter(a -> hasAtLeastOneCurrency(a, accountCurrency, tradingCurrency))
-			.collect(Collectors.toMap(Account::getCurrency, a -> a));
+			.collect(toMap(Account::getCurrency, a -> a));
 
 		if (counterAccounts.size() < 2) {
 			return null;
@@ -209,7 +219,7 @@ public class CoinbaseService {
 		// determine rate
 		int rate = random.nextInt(789_000);
 
-		switch(order.getSide()) {
+		switch(orderSide) {
 		case "buy":
 			tradingAccount.setBalance(String.valueOf(currentBaseAccountBalance / rate));
 			baseAccount.setBalance("0.00");
@@ -227,6 +237,7 @@ public class CoinbaseService {
 		fill.setPrice(String.valueOf(rate));
 		fill.setSize(String.valueOf(size));
 		fill.setSide(order.getSide());
+		fills.add(fill);
 
 		Map<String, Object> result = new HashMap<>();
 		result.put("id", fill.getOrderId());
@@ -246,7 +257,115 @@ public class CoinbaseService {
 
 	// could return Fill but check it out first - this is not even called by gold-digger
 	public Order getOrder(String id) {
-		return null;
+//		id
+//		string
+//		required
+//
+//		uuid
+//		price
+//		string
+//
+//		price per unit of base currency
+//		size
+//		string
+//
+//		amount of base currency to buy/sell
+//		product_id
+//		string
+//		required
+//
+//		book the order was placed on
+//		profile_id
+//		string
+//
+//		profile_id that placed the order
+//		side
+//		string
+//		required
+//
+//		buy sell
+//		funds
+//		string
+//
+//		amount of quote currency to spend (for market orders)
+//		specified_funds
+//		string
+//
+//		funds with fees
+//		type
+//		string
+//		required
+//
+//		limit market stop
+//		time_in_force
+//		string
+//
+//		GTC GTT IOC FOK
+//		expire_time
+//		date-time
+//
+//		timestamp at which order expires
+//		post_only
+//		boolean
+//		required
+//
+//		if true, forces order to be maker only
+//		created_at
+//		date-time
+//		required
+//
+//		timestamp at which order was placed
+//		done_at
+//		date-time
+//
+//		timestamp at which order was done
+//		done_reason
+//		string
+//
+//		reason order was done (filled, rejected, or otherwise)
+//		reject_reason
+//		string
+//
+//		reason order was rejected by engine
+//		fill_fees
+//		string
+//		required
+//
+//		fees paid on current filled amount
+//		filled_size
+//		string
+//		required
+//
+//		amount (in base currency) of the order that has been filled
+//		executed_value
+//		string
+//		status
+//		string
+//		required
+//
+//		open pending rejected done active received all
+//		settled
+//		boolean
+//		required
+//
+//		true if funds have been exchanged and settled
+//		stop
+//		string
+//
+//		loss entry
+//		stop_price
+//		string
+//
+//		price (in quote currency) at which to execute the order
+//		funding_amount
+//		string
+//		client_oid
+//		string
+//
+//		client order id
+//		string
+		
+		Order o = new Order();
+		return o;
 	}
-
 }

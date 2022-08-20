@@ -68,11 +68,11 @@ public class CoinbaseController {
 
 	@RequestMapping(path = "/orders", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	public Map<String, Object> placeOrder(Order order) {
+	public Map<String, Object> placeOrder(@RequestBody Order order) {
 		return coinbaseService.placeOrder(order);
 	}
 
-	// Order tym padom by mal jebat na tie ktore su null
+	// Order tym padom by mal jebat na tie ktore su null a tak mozem obohatit model
 	@RequestMapping(path = "/orders/{id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public Order getOrder(@PathVariable String id) {
